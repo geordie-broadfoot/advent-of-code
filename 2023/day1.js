@@ -1,13 +1,14 @@
+const testInput1 = ["1abc2", "pqr3stu8vwx", "a1b2c3d4e5f", "treb7uchet"];
 
-const testInput1 = []
-
-const testInput2 = ['two1nine',
-'eightwothree',
-'abcone2threexyz',
-'xtwone3four',
-'4nineeightseven2',
-'zoneight234',
-'7pqrstsixteen',]
+const testInput2 = [
+  "two1nine",
+  "eightwothree",
+  "abcone2threexyz",
+  "xtwone3four",
+  "4nineeightseven2",
+  "zoneight234",
+  "7pqrstsixteen",
+];
 
 const rawInput = `hcpjssql4kjhbcqzkvr2fivebpllzqbkhg
 4threethreegctxg3dmbm1
@@ -1008,74 +1009,79 @@ ndtvfive2brkzntrjjl179
 nine5fivecgfsbvbtsn57five7djxlclnfv
 2gzqrfldtlpeight3fivencmlmffivevqkhncfm
 7bbfbcvh6
-ffnrprtnine1tjznmckv5sixczv`
+ffnrprtnine1tjznmckv5sixczv`;
 
-const testing = false
-
-const input = rawInput.split('\n')
-
-
+const testing = !!process.argv[2]?.match("^-t(est)?") || false;
+console.log("TESTING = ", testing);
+const input = rawInput.split("\n");
 
 const numberMap = {
-    '^one': '1',
-    '^two': '2',
-    '^three': '3',
-    '^four': '4',
-    '^five': '5',
-    '^six': '6',
-    '^seven': '7',
-    '^eight': '8',
-    '^nine': '9',
+  "^one": "1",
+  "^two": "2",
+  "^three": "3",
+  "^four": "4",
+  "^five": "5",
+  "^six": "6",
+  "^seven": "7",
+  "^eight": "8",
+  "^nine": "9",
+};
+
+{
+  console.log("Part 1");
+  let sum = 0;
+
+  for (let i = 0; i < (testing ? testInput1.length : input.length); i++) {
+    let row = testing ? testInput1[i] : input[i];
+
+    const numbers = row.replaceAll(/[a-z]/g, "").split("");
+
+    const value = numbers[0] + numbers[numbers.length - 1];
+
+    sum += Number(value);
+  }
+  console.log("Final sum: ", sum);
 }
 
-console.log('Part 1')
+{
+  console.log("Part 2");
+  let sum = 0;
+  for (let i = 0; i < (testing ? testInput2.length : input.length); i++) {
+    let row = testing ? testInput2[i] : input[i];
 
-let sum = 0;
-for (let i = 0; i < (testing ? testInput2.length : input.length); i++) {
-    let row = testing ? testInput2[i] : input[i]
-    console.log('\n\nRow:\n\t', row)
-    
-    const numbers = []
+    const numbers = [];
 
     //parse the string
     while (row.length > 0) {
-        //console.log(row)
-        let foundMatch = false
+      let foundMatch = false;
 
-        if (row.match(/^[0-9]/)) {
-            //console.log('found digit')
-            foundMatch = true
-            numbers.push(row[0])
-            row = row.substring(1)
-        }
-        //look for text values
-        if (!foundMatch) {
-            Object.entries(numberMap).forEach(([k, v]) => {
-                if (row.match(k) && !foundMatch) {
-                    //console.log('found text value:', k)
-                    foundMatch = true
-                    numbers.push(v)
-                    row = row.substring(k.length - 2)
-                }
-            })
-        }
+      if (row.match(/^[0-9]/)) {
+        foundMatch = true;
+        numbers.push(row[0]);
+        row = row.substring(1);
+      }
+      //look for text values
+      if (!foundMatch) {
+        Object.entries(numberMap).forEach(([k, v]) => {
+          if (row.match(k) && !foundMatch) {
+            foundMatch = true;
+            numbers.push(v);
+            row = row.substring(k.length - 2);
+          }
+        });
+      }
 
-        if (!foundMatch) {
-            //console.log('no match found')
-            row = row.substring( 1)
-        }
+      if (!foundMatch) {
+        row = row.substring(1);
+      }
     }
 
-    const first = numbers[0]
-    const last = numbers[numbers.length - 1]
+    const first = numbers[0];
+    const last = numbers[numbers.length - 1];
 
+    const number = first + last;
 
-    const number = first + last
-
-    console.log(first, last)
-    sum += Number(number)
-}   
-console.log("Final sum: ", sum)
-
-
-
+    sum += Number(number);
+  }
+  console.log("Final sum: ", sum);
+}
