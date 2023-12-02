@@ -1,3 +1,5 @@
+console.log("AoC 2023 - Day 1");
+
 const testInput1 = ["1abc2", "pqr3stu8vwx", "a1b2c3d4e5f", "treb7uchet"];
 
 const testInput2 = [
