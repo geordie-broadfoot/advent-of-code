@@ -1,12 +1,12 @@
-console.log("AoC 2023 - Day 2");
+console.log("AoC 2023 - Day 2")
 
 const testInput1 = `Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
     Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue
     Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red
     Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red
-    Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green`;
+    Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green`
 
-const testInput2 = ``;
+const testInput2 = ``
 
 const rawInput = `Game 1: 1 blue; 4 green, 5 blue; 11 red, 3 blue, 11 green; 1 red, 10 green, 4 blue; 17 red, 12 green, 7 blue; 3 blue, 19 green, 15 red
 Game 2: 17 red, 10 green; 3 blue, 17 red, 7 green; 10 green, 1 blue, 10 red; 7 green, 15 red, 1 blue; 7 green, 8 blue, 16 red; 18 red, 5 green, 3 blue
@@ -107,53 +107,53 @@ Game 96: 12 green, 2 blue; 11 green, 3 blue; 3 red, 2 green, 5 blue; 12 green, 2
 Game 97: 6 red, 3 blue, 1 green; 1 blue, 2 red, 14 green; 4 blue, 14 green
 Game 98: 13 green, 1 red, 5 blue; 2 red, 5 green, 7 blue; 19 green, 5 blue; 4 blue, 13 green; 5 green, 8 blue
 Game 99: 11 red, 8 green; 16 red, 10 green; 9 red, 6 green; 3 blue, 2 red, 4 green
-Game 100: 4 red, 2 blue, 4 green; 2 green, 1 red, 1 blue; 3 green, 4 blue, 5 red; 18 red, 2 blue; 9 red, 5 green, 4 blue`;
+Game 100: 4 red, 2 blue, 4 green; 2 green, 1 red, 1 blue; 3 green, 4 blue, 5 red; 18 red, 2 blue; 9 red, 5 green, 4 blue`
 
-const testing = !!process.argv[2]?.match("-t(est)?") || false;
+const testing = !!process.argv[2]?.match("-t(est)?") || false
 
 const defaultDraw = {
   red: 0,
   green: 0,
   blue: 0,
-};
+}
 
 const upperLimit = {
   red: 12,
   green: 13,
   blue: 14,
-};
-let games = [];
+}
+let games = []
 {
-  console.log("Part 1");
+  console.log("Part 1")
 
-  let input = testing ? testInput1 : rawInput;
+  let input = testing ? testInput1 : rawInput
 
   games = input.split("\n").map((row) => {
-    const [name, stats] = row.split(":");
+    const [name, stats] = row.split(":")
 
-    const id = name.trim().split(" ")[1];
+    const id = name.trim().split(" ")[1]
 
     const rounds = stats.split(";").map((set) => {
       const draws = set.split(",").reduce(
         (acc, d) => {
           //console.log(d);
-          const [number, color] = d.trim().split(" ");
-          acc[color.trim()] = Number(number);
-          return acc;
+          const [number, color] = d.trim().split(" ")
+          acc[color.trim()] = Number(number)
+          return acc
         },
         { ...defaultDraw }
-      );
+      )
 
-      return draws;
-    });
+      return draws
+    })
     return {
       id,
       rounds,
-    };
-  });
+    }
+  })
 
   const output = games.reduce((total, game) => {
-    let isValid = true;
+    let isValid = true
     //console.log(`Considering game ${game.id}:\n${JSON.stringify(game.rounds)}`);
     game.rounds.forEach((round) => {
       if (
@@ -161,36 +161,36 @@ let games = [];
         round.green > upperLimit.green ||
         round.blue > upperLimit.blue
       )
-        isValid = false;
-    });
+        isValid = false
+    })
 
     if (isValid) {
       //console.log(`Game ${game.id} is valid`);
-      total += Number(game.id);
+      total += Number(game.id)
     }
-    return total;
-  }, 0);
+    return total
+  }, 0)
 
-  console.log("Output: ", output);
+  console.log("Output: ", output)
 }
 
 {
-  console.log("Part 2");
-  let sum = 0;
+  console.log("Part 2")
+  let sum = 0
   games.forEach((game) => {
     const min = game.rounds.reduce(
       (acc, r) => {
-        ["red", "green", "blue"].forEach((c) => {
-          if (acc[c] < r[c]) acc[c] = r[c];
-        });
+        ;["red", "green", "blue"].forEach((c) => {
+          if (acc[c] < r[c]) acc[c] = r[c]
+        })
 
-        return acc;
+        return acc
       },
       { ...defaultDraw }
-    );
+    )
 
-    sum += min.red * min.green * min.blue;
-  });
+    sum += min.red * min.green * min.blue
+  })
 
-  console.log("Output:", sum);
+  console.log("Output:", sum)
 }
