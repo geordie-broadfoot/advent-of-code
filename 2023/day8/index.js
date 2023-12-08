@@ -1,4 +1,4 @@
-import { Puzzle } from "../../utils/day.cjs"
+import { Puzzle } from "../../utils/puzzle.cjs"
 
 const puzzle = new Puzzle("Day 8")
 
@@ -7,7 +7,6 @@ const parseInput = (input) => {
     .split("\n\n")[0]
     .split("")
     .map((n) => (n == "R" ? 1 : 0))
-
   let map = input
     .split("\n\n")[1]
     .split("\n")
@@ -25,31 +24,24 @@ const parseInput = (input) => {
   }
 }
 
-{
-  console.log("Part 1")
-
-  const input = parseInput(puzzle.getInput(1))
-
+puzzle.setPart1((rawInput) => {
+  const input = parseInput(rawInput)
   let steps = 0
   let current = "AAA"
-
+  //console.log(input)
   while (current != "ZZZ") {
     current = input.map[current][input.steps[steps++ % input.steps.length]]
   }
 
-  console.log("Output:", steps)
-}
+  return steps
+})
 
-{
-  console.log("Part 2")
-
-  const input = parseInput(puzzle.getInput(2))
-
+puzzle.setPart2((rawinput) => {
+  const input = parseInput(rawinput)
   let finished = false
   let steps = 0
 
   const positions = Object.keys(input.map).filter((k) => k[2] == "A")
-  //console.log(positions)
   const startingPositions = [...positions]
 
   // Record the distance between steps when a __Z tile is reached
@@ -64,7 +56,6 @@ const parseInput = (input) => {
     for (let i = 0; i < positions.length; i++) {
       const next = input.map[positions[i]][dir]
 
-      //console.log(positions[i], " ---> ", next, dir)
       positions[i] = next
 
       if (positions[i][2] != "Z") finished = false
@@ -72,8 +63,8 @@ const parseInput = (input) => {
         const pos = startingPositions[i]
         if (!res[pos]) res[pos] = []
         if (res[pos].length < 2) res[pos].push(steps + 1)
-        //console.log(res)
 
+        // Check if all starting positions have found a loop yet
         if (
           Object.keys(res).length === 6 &&
           Object.values(res).reduce((t, v) => {
@@ -87,10 +78,9 @@ const parseInput = (input) => {
       }
     }
     steps++
-
-    for (let i = 0; i < 10000; i++) {}
   }
 
+  // Map loops into an interval
   const intervals = Object.entries(res).reduce((i, [k, v]) => {
     i.push({
       pos: k,
@@ -103,6 +93,7 @@ const parseInput = (input) => {
 
   let searching = true
   let current = intervals[0].start
+
   while (searching) {
     searching = false
 
@@ -117,5 +108,7 @@ const parseInput = (input) => {
     }
   }
 
-  console.log("Output:", intervals[0].current)
-}
+  return intervals[0].current
+})
+
+puzzle.run()

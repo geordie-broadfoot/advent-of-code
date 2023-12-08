@@ -1,14 +1,6 @@
-const testInput1 = `Time: 7 15 30
-Distance: 9 40 200`
+import { Puzzle } from "../../utils/puzzle.cjs"
 
-const expectedPt1 = 288
-
-const expectedPt2 = 71503
-
-const rawInput = `Time: 49 87 78 95
-Distance: 356 1378 1502 1882`
-
-const testing = process.argv[2]?.match("-t") || false
+const puzzle = new Puzzle("Day 6, 2023")
 
 const parseInput = (input) => {
   let i = input.split("\n")
@@ -41,24 +33,17 @@ const findWinCount = (game) => {
   return wins
 }
 
-{
-  console.log("Part 1")
-  const input = parseInput(testing ? testInput1 : rawInput)
+puzzle.setPart1((rawinput) => {
+  const input = parseInput(rawinput)
 
   const wins = input.map(findWinCount)
 
-  //console.log("wins", wins)
-
   let output = wins.reduce((t, w) => t * w, 1)
 
-  testing && console.log("Expected output: ", expectedPt1)
-  console.log("Output: ", output)
-}
+  return output
+})
 
-{
-  console.log("Part 2")
-  const input = testing ? testInput1 : rawInput
-
+puzzle.setPart2((input) => {
   const time = input
     .split("\n")[0]
     .split(" ")
@@ -70,9 +55,8 @@ const findWinCount = (game) => {
     .slice(1)
     .reduce((a, n) => a + n, "")
 
-  console.log(time, record)
   let output = findWinCount({ time, record })
+  return output
+})
 
-  testing && console.log("Expected output: ", expectedPt2)
-  console.log("Output: ", output)
-}
+puzzle.run()
