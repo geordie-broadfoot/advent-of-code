@@ -1,38 +1,24 @@
-const testInput1 = ``
-
-const expectedPt1 = 0
-const expectedPt2 = 0
-
-const rawInput = ``
-
-const testing = process.argv[2]?.match("-t") || false
-
-const pt2 = process.argv[2]?.match("-p2") || false
+import { Puzzle } from "../../utils/puzzle.cjs"
+const puzzle = new Puzzle("Day 1, 2023")
 
 const parseInput = (input) => {
   return input
 }
 
-{
-  console.log("Part 1")
-
-  const input = parseInput(testing ? testInput1 : rawInput)
+puzzle.setPart1((rawInput) => {
+  const input = parseInput(rawInput)
 
   let output = 0
 
-  testing && console.log("Expected output:", expectedPt1)
-  console.log("Output:", output)
-}
+  return output
+})
 
-{
-  if (pt2) {
-    console.log("Part 2")
+puzzle.setPart2((rawInput) => {
+  const input = parseInput(rawInput)
 
-    const input = parseInput(testing ? testInput1 : rawInput)
+  let output = 0
 
-    let output = 0
+  return output
+})
 
-    testing && console.log("Expected output:", expectedPt2)
-    console.log("Output:", output)
-  }
-}
+puzzle.run()
