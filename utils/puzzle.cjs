@@ -20,7 +20,7 @@ class Puzzle {
         // Take expected value from last row of test
         return part.split("\n\n\n").map((testStr) => {
           let rows = testStr.split("\n")
-          const expectedValue = Number(rows.slice(-1))
+          const expectedValue = rows.slice(-1)
           //console.log(rows.slice(0, -1))
           const test = rows.slice(0, -1).join("\n")
           return [test, expectedValue]
