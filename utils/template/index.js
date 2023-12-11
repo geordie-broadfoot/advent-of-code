@@ -1,4 +1,4 @@
-import { Puzzle } from "../../utils/puzzle.cjs"
+import { Puzzle } from "../puzzle.cjs"
 const puzzle = new Puzzle("Day 1, 2023")
 
 const parseInput = (input) => {

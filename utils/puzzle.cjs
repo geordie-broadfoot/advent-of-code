@@ -55,7 +55,7 @@ class Puzzle {
 
         console.log("    - Output:  ", output)
 
-        this.isTesting && console.log("    - Expected:", input[1] ?? "err")
+        this.isTesting && console.log("    - Expected:", input[1][0] ?? "err")
         console.log("\n  (", end - start, "ms )\n\n")
       })
     })
