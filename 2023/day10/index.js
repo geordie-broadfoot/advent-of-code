@@ -8,7 +8,7 @@ let tileMap = {
   J: "┘",
   "|": "│",
   "-": "─",
-  ".": " ",
+  ".": "*",
 }
 
 const pipeMap = {
@@ -295,7 +295,7 @@ const bfs = (map, start) => {
     //if (tile.x === 0 && tile.y === 0) return false
 
     if (map[tile.y][tile.x] === ".") {
-      map[tile.y][tile.x] = "*"
+      map[tile.y][tile.x] = " "
       openTilesFound++
     }
 
@@ -315,10 +315,10 @@ const bfs = (map, start) => {
 
 const findPointsInsideLoop = (map, openTiles) => {
   const outsideTiles = bfs(map, {
-    x: Math.floor(map[0].length / 2),
-    y: Math.floor(map.length / 2),
+    x: 0,
+    y: 0,
   })
-  return outsideTiles
+  return openTiles.length - outsideTiles
 }
 
 puzzle.setPart2((rawInput) => {
