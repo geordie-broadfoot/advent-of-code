@@ -1,3 +1,4 @@
+import { forEachCell } from "../../utils/helpers/grids/index.js"
 import { Puzzle } from "../../utils/puzzle.cjs"
 const puzzle = new Puzzle("Day 6, 2024")
 
@@ -67,10 +68,8 @@ puzzle.setPart1((rawInput) => {
 
   let currentDir = "n"
   const currentPos = { ...input.startPos }
-  let steps = 0
   while (isOnMap) {
     // Walk
-    steps++
     const nextPos = {
       x: currentPos.x + DIRS[currentDir].x,
       y: currentPos.y + DIRS[currentDir].y,
@@ -92,19 +91,17 @@ puzzle.setPart1((rawInput) => {
     ) {
       // Step forward
       // console.log("Walking to", nextPos)
-      console.log()
       currentPos.x = nextPos.x
       currentPos.y = nextPos.y
 
       // Put direction symbol onto map
-      input.map[currentPos.y][currentPos.x] = DIRS[currentDir].sym
+      input.map[currentPos.y][currentPos.x] =
+        next === "." ? DIRS[currentDir].sym : "@"
     } else if (next === "#") {
       // Hit wall, turn right
       currentDir = TURNS[currentDir]
       input.map[currentPos.y][currentPos.x] = DIRS[currentDir].sym
     }
-    steps % 100 === 0 &&
-      console.log(input.map.reduce((a, row) => a + row.join(" ") + "\n", ""))
   }
 
   const visitedTiles = input.map.reduce(
@@ -116,12 +113,60 @@ puzzle.setPart1((rawInput) => {
       }, 0),
     0
   )
-
+  console.log(
+    input.map
+      .reduce((a, row) => a + row.join("  ") + "\n", "")
+      .replace(/\./g, " ")
+  )
   return visitedTiles
 })
 
+/**
+ *
+ * Records the direction of travel on each visited tile to know if it has been repeated
+ *
+ *  - if you ever hit the same tile in the same direction as before - you are in a loop
+ *
+ * @returns true if a loop exists, false if exits map
+ *
+ */
+const walkV2 = (grid, start) => {
+  let currentPos = {
+    x: start.x,
+    y: start.y,
+    dir: start.dir ?? "n",
+  }
+
+  let isOnMap = true
+
+  while (isOnMap) {
+    let d = DIRS[currentPos.dir]
+
+    const nextPos = { x: currentPos.x + d.x, y: currentPos.y + d.y }
+
+    const nextTile = getGridCell(grid, nextPos.x, nextPos.y)
+
+    if (!nextTile) {
+      // Not on grid anymore
+      return false
+    }
+
+    // Walk
+    if (nextTile.value === WALL) {
+      const newDir = DIR[TURNS[currentPos.dir]]
+    }
+  }
+}
+
 puzzle.setPart2((rawInput) => {
   const input = parseInput(rawInput)
+
+  forEachCell(input.map, ({ x, y, value }) => {
+    input.map[y][x] = {
+      value,
+      moves: [],
+    }
+  })
 
   let output = 0
 
