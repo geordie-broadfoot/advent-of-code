@@ -16,5 +16,8 @@
     "2023",
     "2024"
   ],
-  "type": "module"
+  "type": "module",
+  "scripts":{
+    "ts": "node --experimental-strip-types"
+  }
 }
