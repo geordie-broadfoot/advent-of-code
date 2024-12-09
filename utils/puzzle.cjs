@@ -50,7 +50,7 @@ class Puzzle {
         this.isTesting && console.log("  Test case #", i + 1, "\n")
 
         const start = Date.now()
-        const output = this.parts[p - 1](input[0])
+        const output = this.parts[p - 1](input[0], this.isTesting)
         const end = Date.now()
 
         console.log("    - Output:  ", output)

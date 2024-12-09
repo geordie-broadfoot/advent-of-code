@@ -197,19 +197,19 @@ const toDelta = (p1, p2) => ({ x: p1.x - p2.x, y: p1.y - p2.y })
  */
 const findPaths = (map, chart) => {
   let scanning = true
-  console.log("Scanning for paths....")
+  // console.log("Scanning for paths....")
   while (scanning) {
-    console.log("   --- scanning round begin ----")
+    // console.log("   --- scanning round begin ----")
     let scannedANode = false
     for (const kv of Object.entries(chart).filter(([k, v]) => !v.scanned)) {
       const [coord, nodex] = kv
       const node = chart[coord]
       // Don't rescan a completed node
       if (node.scanned) {
-        console.log("already scanned ", coord)
+        // console.log("already scanned ", coord)
         continue
       }
-      console.log("    scanning node ", coord)
+      // console.log("    scanning node ", coord)
       chart[coord].scanned = true
       scannedANode = true
 
@@ -265,7 +265,7 @@ const findPaths = (map, chart) => {
     if (!scannedANode) scanning = false
   }
 
-  printChart(chart)
+  // printChart(chart)
   // continue to next iteration
   // findPaths(map, chart)
 }
@@ -286,7 +286,7 @@ const walkGraph = (chart, end, pos = "1,0", hist = []) => {
   if (pos === end) {
     const distance = hist.reduce((a, t) => a + t[1].steps, 0)
 
-    console.log(distance, record)
+    // console.log(distance, record)
 
     if (distance > record) record = distance
 
