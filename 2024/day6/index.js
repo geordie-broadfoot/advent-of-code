@@ -1,9 +1,5 @@
-import { forEachCell } from "../../utils/helpers/grids/index.js"
 import { Puzzle } from "../../utils/puzzle.cjs"
 const puzzle = new Puzzle("Day 6, 2024")
-
-const WALL = /#/g
-const OPEN = /\.\^>V</g
 
 const DIRS = {
   n: {
@@ -63,7 +59,7 @@ const getGridCell = (grid, x, y) => {
 
 puzzle.setPart1((rawInput) => {
   const input = parseInput(rawInput)
-  console.log(input)
+  // console.log(input)
   let isOnMap = true
 
   let currentDir = "n"
@@ -113,11 +109,11 @@ puzzle.setPart1((rawInput) => {
       }, 0),
     0
   )
-  console.log(
-    input.map
-      .reduce((a, row) => a + row.join("  ") + "\n", "")
-      .replace(/\./g, " ")
-  )
+  // console.log(
+  //   input.map
+  //     .reduce((a, row) => a + row.join("  ") + "\n", "")
+  //     .replace(/\./g, " ")
+  // )
   return visitedTiles
 })
 
@@ -130,45 +126,87 @@ puzzle.setPart1((rawInput) => {
  * @returns true if a loop exists, false if exits map
  *
  */
-const walkV2 = (grid, start) => {
-  let currentPos = {
-    x: start.x,
-    y: start.y,
-    dir: start.dir ?? "n",
-  }
-
+const walkV2 = (grid, opos, hist = []) => {
+  const pos = { ...opos }
   let isOnMap = true
 
   while (isOnMap) {
-    let d = DIRS[currentPos.dir]
+    let d = DIRS[pos.dir]
+    // console.log("Walking at pos", pos, d)
 
-    const nextPos = { x: currentPos.x + d.x, y: currentPos.y + d.y }
+    const nextPos = { x: pos.x + d.x, y: pos.y + d.y, dir: pos.dir }
 
+    grid[pos.y][pos.x] = d.sym
     const nextTile = getGridCell(grid, nextPos.x, nextPos.y)
 
     if (!nextTile) {
+      // console.log(grid.map((r) => r.join("")).join("\n"))
       // Not on grid anymore
-      return false
+      // console.log("Off grid")
+      isOnMap = false
+      return [...hist, pos]
+    } else if (
+      hist.filter((h) => h.x === pos.x && h.y === pos.y && h.dir === pos.dir)
+        .length > 0
+    ) {
+      // Position exists in history already, going the same direction
+      // This must be a loop
+      // console.log("Found loop")
+      return true
     }
+    hist.push({ ...pos })
 
-    // Walk
-    if (nextTile.value === WALL) {
-      const newDir = DIR[TURNS[currentPos.dir]]
+    if (nextTile === "#" || nextTile === "0") {
+      // Turn right
+      pos.dir = TURNS[pos.dir]
+    } else {
+      // Walk
+      pos.dir = nextPos.dir
+      pos.x = nextPos.x
+      pos.y = nextPos.y
     }
   }
+  // return hist
+}
+
+const copyMap = (map) => {
+  return map.map((row) => [...row])
 }
 
 puzzle.setPart2((rawInput) => {
-  const input = parseInput(rawInput)
-
-  forEachCell(input.map, ({ x, y, value }) => {
-    input.map[y][x] = {
-      value,
-      moves: [],
-    }
-  })
-
+  const { map, startPos } = parseInput(rawInput)
+  const fMap = copyMap(map)
+  const path = walkV2(fMap, { ...startPos, dir: "n" }).reduce((acc, p) => {
+    if (acc.filter((a) => a.x === p.x && a.y === p.y).length === 0) acc.push(p)
+    return acc
+  }, [])
   let output = 0
+  // console.log(path.length, path)
+  // console.log(fMap.map((row) => row.join("")).join("\n"), "\n\n")
+
+  for (let i = 1; i < path.length; i++) {
+    let nMap = copyMap(map)
+    // Add a wall at this path pos
+    let o = {
+      x: path[i].x,
+      y: path[i].y,
+    }
+
+    nMap[path[i].y][path[i].x] = "0"
+
+    let pp = walkV2(nMap, { ...path[i - 1] }, path.slice(0, i - 1))
+
+    if (pp === true) {
+      // console.log(
+      //   nMap
+      //     .map((row) => row.join(""))
+      //     .join("\n")
+      //     .replace(/[\.><v^]/g, " "),
+      //   "\n\n"
+      // )
+      output++
+    }
+  }
 
   return output
 })
