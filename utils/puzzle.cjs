@@ -50,13 +50,17 @@ class Puzzle {
         this.isTesting && console.log("  Test case #", i + 1, "\n")
 
         const start = Date.now()
-        const output = this.parts[p - 1](input[0], this.isTesting)
-        const end = Date.now()
+        try {
+          const output = this.parts[p - 1](input[0], this.isTesting)
+          const end = Date.now()
 
-        console.log("    - Output:  ", output)
+          console.log("    - Output:  ", output)
 
-        this.isTesting && console.log("    - Expected:", input[1][0] ?? "err")
-        console.log("\n  (", end - start, "ms )\n\n")
+          this.isTesting && console.log("    - Expected:", input[1][0] ?? "err")
+          console.log("\n  (", end - start, "ms )\n\n")
+        } catch (err) {
+          console.log("Fatal error occurred:\n\n", err)
+        }
       })
     })
   }

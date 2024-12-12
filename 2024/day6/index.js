@@ -117,22 +117,13 @@ puzzle.setPart1((rawInput) => {
   return visitedTiles
 })
 
-/**
- *
- * Records the direction of travel on each visited tile to know if it has been repeated
- *
- *  - if you ever hit the same tile in the same direction as before - you are in a loop
- *
- * @returns true if a loop exists, false if exits map
- *
- */
+// Records history of walk
 const walkV2 = (grid, opos, hist = []) => {
   const pos = { ...opos }
   let isOnMap = true
 
   while (isOnMap) {
     let d = DIRS[pos.dir]
-    // console.log("Walking at pos", pos, d)
 
     const nextPos = { x: pos.x + d.x, y: pos.y + d.y, dir: pos.dir }
 
@@ -140,9 +131,7 @@ const walkV2 = (grid, opos, hist = []) => {
     const nextTile = getGridCell(grid, nextPos.x, nextPos.y)
 
     if (!nextTile) {
-      // console.log(grid.map((r) => r.join("")).join("\n"))
       // Not on grid anymore
-      // console.log("Off grid")
       isOnMap = false
       return [...hist, pos]
     } else if (
@@ -151,7 +140,6 @@ const walkV2 = (grid, opos, hist = []) => {
     ) {
       // Position exists in history already, going the same direction
       // This must be a loop
-      // console.log("Found loop")
       return true
     }
     hist.push({ ...pos })
@@ -166,7 +154,6 @@ const walkV2 = (grid, opos, hist = []) => {
       pos.y = nextPos.y
     }
   }
-  // return hist
 }
 
 const copyMap = (map) => {
