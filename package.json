@@ -8,8 +8,16 @@
     "math.js": "^1.1.46",
     "node-fetch": "^3.3.0"
   },
-  "directories": {
-    "utils": "utils"
-  },
-  "type": "module"
+  "files": [
+    "utils",
+    "helpers",
+    "helpers/**/*",
+    "2022",
+    "2023",
+    "2024"
+  ],
+  "type": "module",
+  "scripts":{
+    "ts": "node --experimental-strip-types"
+  }
 }

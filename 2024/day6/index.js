@@ -1,8 +1,5 @@
 import { Puzzle } from "../../utils/puzzle.cjs"
-const puzzle = new Puzzle(import.meta.url)
-
-const WALL = /#/g
-const OPEN = /[\.\^>V<]/g
+const puzzle = new Puzzle("Day 6, 2024")
 
 const DIRS = {
   n: {
@@ -62,34 +59,40 @@ const getGridCell = (grid, x, y) => {
 
 puzzle.setPart1((rawInput, testing) => {
   const input = parseInput(rawInput)
+  // console.log(input)
   let isOnMap = true
 
   let currentDir = "n"
   const currentPos = { ...input.startPos }
-  let steps = 0
   while (isOnMap) {
     // Walk
-    steps++
     const nextPos = {
       x: currentPos.x + DIRS[currentDir].x,
       y: currentPos.y + DIRS[currentDir].y,
     }
     const next = getGridCell(input.map, nextPos.x, nextPos.y)
 
+    // console.log("Next tile:", next)
 
     if (next === "") {
       // outside of map
+      // console.log("Went off of map")
       isOnMap = false
     } else if (
-      ['.', '^','>','<','v'].includes(next)
+      next === "." ||
+      next === "^" ||
+      next === ">" ||
+      next === "v" ||
+      next === "<"
     ) {
       // Step forward
+      // console.log("Walking to", nextPos)
       currentPos.x = nextPos.x
       currentPos.y = nextPos.y
 
       // Put direction symbol onto map
-     
-      input.map[currentPos.y][currentPos.x] = next === '.' ? DIRS[currentDir].sym : 'X'
+      input.map[currentPos.y][currentPos.x] =
+        next === "." ? DIRS[currentDir].sym : "@"
     } else if (next === "#") {
       // Hit wall, turn right
       currentDir = TURNS[currentDir]
@@ -106,14 +109,104 @@ puzzle.setPart1((rawInput, testing) => {
       }, 0),
     0
   )
-testing && console.log(input.map.map(r => r.join('')).join('\n').replace(/\./g, ' '))
+  // console.log(
+  //   input.map
+  //     .reduce((a, row) => a + row.join("  ") + "\n", "")
+  //     .replace(/\./g, " ")
+  // )
   return visitedTiles
 })
 
-puzzle.setPart2((rawInput) => {
-  const input = parseInput(rawInput)
+/**
+ *
+ * Records the direction of travel on each visited tile to know if it has been repeated
+ *
+ *  - if you ever hit the same tile in the same direction as before - you are in a loop
+ *
+ * @returns true if a loop exists, false if exits map
+ *
+ */
+const walkV2 = (grid, opos, hist = []) => {
+  const pos = { ...opos }
+  let isOnMap = true
 
+  while (isOnMap) {
+    let d = DIRS[pos.dir]
+    // console.log("Walking at pos", pos, d)
+
+    const nextPos = { x: pos.x + d.x, y: pos.y + d.y, dir: pos.dir }
+
+    grid[pos.y][pos.x] = d.sym
+    const nextTile = getGridCell(grid, nextPos.x, nextPos.y)
+
+    if (!nextTile) {
+      // console.log(grid.map((r) => r.join("")).join("\n"))
+      // Not on grid anymore
+      // console.log("Off grid")
+      isOnMap = false
+      return [...hist, pos]
+    } else if (
+      hist.filter((h) => h.x === pos.x && h.y === pos.y && h.dir === pos.dir)
+        .length > 0
+    ) {
+      // Position exists in history already, going the same direction
+      // This must be a loop
+      // console.log("Found loop")
+      return true
+    }
+    hist.push({ ...pos })
+
+    if (nextTile === "#" || nextTile === "0") {
+      // Turn right
+      pos.dir = TURNS[pos.dir]
+    } else {
+      // Walk
+      pos.dir = nextPos.dir
+      pos.x = nextPos.x
+      pos.y = nextPos.y
+    }
+  }
+  // return hist
+}
+
+const copyMap = (map) => {
+  return map.map((row) => [...row])
+}
+
+puzzle.setPart2((rawInput) => {
+  const { map, startPos } = parseInput(rawInput)
+  const fMap = copyMap(map)
+  const path = walkV2(fMap, { ...startPos, dir: "n" }).reduce((acc, p) => {
+    if (acc.filter((a) => a.x === p.x && a.y === p.y).length === 0) acc.push(p)
+    return acc
+  }, [])
   let output = 0
+  // console.log(path.length, path)
+  // console.log(fMap.map((row) => row.join("")).join("\n"), "\n\n")
+
+  for (let i = 1; i < path.length; i++) {
+    let nMap = copyMap(map)
+    // Add a wall at this path pos
+    let o = {
+      x: path[i].x,
+      y: path[i].y,
+    }
+
+    nMap[path[i].y][path[i].x] = "0"
+
+    let pp = walkV2(nMap, { ...path[i - 1] }, path.slice(0, i - 1))
+
+    if (pp === true) {
+      // console.log(
+      //   nMap
+      //     .map((row) => row.join(""))
+      //     .join("\n")
+      //     .replace(/[\.><v^]/g, " "),
+      //   "\n\n"
+      // )
+      output++
+    }
+  }
 
   return output
 })
