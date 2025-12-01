@@ -1,5 +1,5 @@
 import { Puzzle } from "../../utils/puzzle.cjs"
-const puzzle = new Puzzle("Day 10, 2022")
+const puzzle = new Puzzle(import.meta.url)
 
 const targetCycles = [20, 60, 100, 140, 180, 220]
 let output = 0

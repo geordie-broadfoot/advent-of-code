@@ -1,5 +1,7 @@
 const { readFile } = require("./index.cjs")
 
+const nl = '\r\n'
+
 class Puzzle {
   parts = [
     () => {
@@ -11,15 +13,17 @@ class Puzzle {
   ]
 
   constructor(day) {
-    this.day = day
+    const [yr, dt] = day.split('advent-of-code/')[1].split('/')
+
+    this.day = `Day ${dt.slice(3)}, ${yr}`
     this.input = readFile("input.txt")
 
     this.tests = readFile("test.txt")
-      .split("\n\n--part2\n\n")
+      .split(nl+nl+"--part2"+nl+nl)
       .map((part) => {
         // Take expected value from last row of test
-        return part.split("\n\n\n").map((testStr) => {
-          let rows = testStr.split("\n")
+        return part.split(nl+nl+nl).map((testStr) => {
+          let rows = testStr.split(nl)
           const expectedValue = rows.slice(-1)
           //console.log(rows.slice(0, -1))
           const test = rows.slice(0, -1).join("\n")
@@ -50,7 +54,7 @@ class Puzzle {
         this.isTesting && console.log("  Test case #", i + 1, "\n")
 
         const start = Date.now()
-        const output = this.parts[p - 1](input[0])
+        const output = this.parts[p - 1](input[0], process.argv.includes("-t"))
         const end = Date.now()
 
         console.log("    - Output:  ", output)

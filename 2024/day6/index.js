@@ -1,5 +1,5 @@
 import { Puzzle } from "../../utils/puzzle.cjs"
-const puzzle = new Puzzle("Day 6, 2024")
+const puzzle = new Puzzle(import.meta.url)
 
 const WALL = /#/g
 const OPEN = /[\.\^>V<]/g

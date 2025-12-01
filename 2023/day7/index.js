@@ -1,6 +1,6 @@
 import { Puzzle } from "../../utils/puzzle.cjs"
 
-const puzzle = new Puzzle("Day 7, 2023")
+const puzzle = new Puzzle(import.meta.url)
 
 const handRanks = ["five", "four", "fh", "three", "2pair", "pair", "none"]
 

@@ -1,6 +1,6 @@
 import { Puzzle } from "../../utils/puzzle.cjs"
 
-const puzzle = new Puzzle("Day 8")
+const puzzle = new Puzzle(import.meta.url)
 
 const parseInput = (input) => {
   const steps = input
