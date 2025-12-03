@@ -57,7 +57,7 @@ const getGridCell = (grid, x, y) => {
   return grid[y][x]
 }
 
-puzzle.setPart1((rawInput) => {
+puzzle.setPart1((rawInput, testing) => {
   const input = parseInput(rawInput)
   // console.log(input)
   let isOnMap = true

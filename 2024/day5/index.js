@@ -1,5 +1,5 @@
 import { Puzzle } from "../../utils/puzzle.cjs"
-const puzzle = new Puzzle("Day 5, 2024")
+const puzzle = new Puzzle(import.meta.url)
 
 const parseInput = (input) => {
   const rules = input

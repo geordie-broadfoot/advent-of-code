@@ -1,6 +1,5 @@
 import { Puzzle } from "../../utils/puzzle.cjs"
-import { forEachCell } from "../../utils/helpers/grids/index.js"
-const puzzle = new Puzzle("Day 10, 2024")
+const puzzle = new Puzzle(import.meta.url)
 
 const parseInput = (input) => {
   return input.split("\n").map((row) => {

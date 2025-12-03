@@ -1,5 +1,5 @@
 import { Puzzle } from "../../utils/puzzle.cjs"
-const puzzle = new Puzzle("Day 6, 2022")
+const puzzle = new Puzzle(import.meta.url)
 
 const searchSize = (input, size) => {
   for (let i = 0; i < input.length; i++) {

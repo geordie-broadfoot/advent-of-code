@@ -1,5 +1,5 @@
 import { Puzzle } from "../../utils/puzzle.cjs"
-const puzzle = new Puzzle("Day 2, 2023")
+const puzzle = new Puzzle(import.meta.url)
 // lose, draw, win
 const outcomes = [
   [3, 6, 0], // opp 1 (rock)

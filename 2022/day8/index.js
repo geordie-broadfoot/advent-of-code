@@ -1,5 +1,5 @@
 import { Puzzle } from "../../utils/puzzle.cjs"
-const puzzle = new Puzzle("Day 8, 2022")
+const puzzle = new Puzzle(import.meta.url)
 
 const parseData = (input) => {
   let map = []

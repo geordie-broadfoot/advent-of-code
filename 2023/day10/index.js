@@ -1,5 +1,5 @@
 import { Puzzle } from "../../utils/puzzle.cjs"
-const puzzle = new Puzzle("Day 10, 2023")
+const puzzle = new Puzzle(import.meta.url)
 
 let tileMap = {
   F: "┌",

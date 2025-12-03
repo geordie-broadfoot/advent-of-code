@@ -1,5 +1,5 @@
 import { Puzzle } from "../../utils/puzzle.cjs"
-const puzzle = new Puzzle("Day 11, 2022")
+const puzzle = new Puzzle(import.meta.url)
 
 const parseInput = (input) => {
   let rows = input.split("\n")

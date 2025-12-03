@@ -1,6 +1,5 @@
 import { Puzzle } from "../../utils/puzzle.cjs"
-import { forEachCell } from "../../utils/helpers/grids/index.js"
-const puzzle = new Puzzle("Day 1, 2023")
+const puzzle = new Puzzle(import.meta.url)
 
 // Turn into 2d array --- maybe a map would be better?
 const parseInput = (input) => {

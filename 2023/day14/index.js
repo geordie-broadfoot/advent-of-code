@@ -1,5 +1,5 @@
 import { Puzzle } from "../../utils/puzzle.cjs"
-const puzzle = new Puzzle("Day 14, 2023")
+const puzzle = new Puzzle(import.meta.url)
 
 const ROCK = "O"
 const BOULDER = "#"

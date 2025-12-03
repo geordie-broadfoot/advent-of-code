@@ -1,5 +1,5 @@
 import { Puzzle } from "../../utils/puzzle.cjs"
-const puzzle = new Puzzle("Day 7, 2022")
+const puzzle = new Puzzle(import.meta.url)
 
 const TOTAL_FS_ROOM = 70000000
 const REQUIRED_SPACE = 30000000
